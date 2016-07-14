@@ -1,45 +1,99 @@
 var express = require('express');
 var router = express.Router();
-var tryit = require('../test/tryit');
+var query = require('../helper/query');
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', {title: 'Express'});
+    res.render('index');
 });
 
-router.get('/hello', function (req, res, next) {
-    console.log("rst is "+({}+{}).length)
-    console.log(req.query.name + "   " + req.query.pwd);//返回002
-    res.end('{json}');
-});
-
-router.get('/execPy', function (req, res, next) {
-    res.end("{execPy}");
-    tryit.execPy();
-});
-
-router.get('/execScrapy', function (req, res, next) {
-    res.end("{execScrapy}");
-    tryit.execScrapy();
+router.get('/download', function (req, res, next) {
+    var fs = require('fs');
+    var pdf = fs.createReadStream("../NodeTest/reaper-1.0.apk");
+    res.writeHead(200, {
+        'Content-Type': 'application/force-download',
+        'Content-Disposition': 'attachment; filename=reaper-1.0.apk'
+    });
+    pdf.pipe(res);
 });
 
 
-router.get('/findAlbum', function (req, res, next) {
-    tryit.findAlbum(function (rst) {
-        res.send(JSON.stringify(rst));
+//测试链接
+router.get('/test', function (req, res, next) {
+    query.test(function (rst) {
+        res.send(rst)
+        res.end()
+    });
+});
+
+
+//测试链接
+router.get('/lucky', function (req, res, next) {
+    var limit = ~~req.query.limit;
+    query.lucky(limit, function (rst) {
+        res.send('{' + '"offset":' + 0 + ',' + '"data":' + JSON.stringify(rst) + '}');
+        res.end();
+    })
+});
+
+//浏览全部专辑
+router.get('/scan/whole', function (req, res, next) {
+    var offset = ~~req.query.offset;
+    var limit = ~~req.query.limit;
+    query.getWholeAlbumScanData('album_whole', offset, limit, function (rst) {
+        res.send('{' + '"offset":' + offset + ',' + '"data":' + JSON.stringify(rst) + '}');
         res.end();
     });
 });
 
-router.get('/findDetails', function (req, res, next) {
+//浏览推荐专辑
+router.get('/scan/recommend', function (req, res, next) {
+    var albumtype = req.query.albumtype;
+    var offset = ~~req.query.offset;
+    var limit = ~~req.query.limit;
+    console.log("albumtype = " + albumtype)
+    query.getRecommendAlbumScanData('album_recommend', albumtype, offset, limit, function (rst) {
+        res.send('{' + '"offset":' + offset + ',' + '"data":' + JSON.stringify(rst) + '}');
+        res.end();
+    });
+});
+
+//浏览专辑详情
+router.get('/scan/detail', function (req, res, next) {
     var albumlink = req.query.albumlink;
-    var offset = req.query.offset;
-    tryit.findDetails(albumlink,offset,function (rst) {
-        // res.send(JSON.stringify(rst));
-        res.send('{'+'"offset":'+ offset + ',' + '"data":'+JSON.stringify(rst)+'}');
+    var offset = ~~req.query.offset;
+    var limit = ~~req.query.limit;
+    query.getDetails(albumlink, offset, limit, function (rst) {
+        res.send('{' + '"offset":' + offset + ',' + '"data":' + JSON.stringify(rst) + '}');
         res.end();
     });
 });
 
 
+//查询所有的推荐,用于离线数据
+router.get('/offline/recommend', function (req, res, next) {
+    time = req.query.time;
+    query.offlineData('album_recommend', time, function (rst) {
+        res.send('{' + '"data":' + JSON.stringify(rst) + '}');
+        res.end();
+    });
+});
+
+//查询所有详情,用于离线
+router.get('/offline/detail', function (req, res, next) {
+    time = req.query.time;
+    query.offlineData('album_detail', time, function (rst) {
+        res.send('{' + '"data":' + JSON.stringify(rst) + '}');
+        res.end();
+    });
+});
+
+//查询所有专辑,用于离线
+router.get('/offline/whole', function (req, res, next) {
+    time = req.query.time;
+    query.offlineData('album_whole', time, function (rst) {
+        res.send('{' + '"data":' + JSON.stringify(rst) + '}');
+        res.end();
+    });
+});
 
 module.exports = router;
