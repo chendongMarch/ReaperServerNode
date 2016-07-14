@@ -10,7 +10,7 @@
 
 ###全部专辑WholeAlbum
 ```java
-_id": 主键id
+_id: 主键id
 album_desc":该专辑的描述
 album_link": 指向该专辑的link,每个专辑这个也是唯一的
 key_words": 关键字,用' ,'分割的字符串
@@ -20,17 +20,17 @@ time_stamp": 时间戳
 
 ###推荐专辑RecommendAlbum
 ```java
-_id": 主键id
+_id: 主键id
 album_desc":该专辑的描述
 album_link": 指向该专辑的link,每个专辑这个也是唯一的
-album_type: 该专辑的类型
+album_type: 该专辑的类型(all,new,xinggan,shaonv,swmt,mrxt,wmxz,wallpaper)
 album_cover": 专辑的封面time_stamp": 时间戳
 ```
 
 
 ###推荐专辑AlbumDetail
 ```java
-_id": 主键id
+_id: 主键id
 width":图片的宽度,用来实现瀑布流
 height":图片的高度,用来实现瀑布流
 album_link":指向所在专辑的link,多个专辑详情指向同一个link
@@ -40,11 +40,11 @@ photo_src":详情的图片的链接time_stamp":时间戳
 #接口设计
 
 
-##/
+##<font color='blue'>/</font>
 ###首页
 
 
-##/lucky?limit=10
+##<font color='blue'>/lucky?limit=10</font>
 ###GET
 ###随机获取一定数目的数据,每次都是随机的
 ###url参数
@@ -55,7 +55,7 @@ photo_src":详情的图片的链接time_stamp":时间戳
 ```
 
 
-##/scan/whole?limit=10&offset=10
+##<font color='blue'>/scan/whole?limit=10&offset=10</font>
 ###GET
 ###浏览全部专辑时获取数据
 ###url参数
@@ -67,7 +67,7 @@ photo_src":详情的图片的链接time_stamp":时间戳
 ```
 
 
-##/scan/recommend?limit=10&offset=10&albumtype=new
+##<font color='blue'>/scan/recommend?limit=10&offset=10&albumtype=new</font>
 ###GET
 ###浏览推荐专辑时获取数据
 ###url参数
@@ -79,7 +79,7 @@ photo_src":详情的图片的链接time_stamp":时间戳
 {'offset':0,data:[{RecommendAlbum},{RecommendAlbum}...]}
 ```
 
-##/scan/detail
+##<font color='blue'>/scan/detail?limit=10&offset=10&albumlink=http://xxxxxx</font>
 ###GET
 ###获取某一个专辑的详情数据
 ###url参数
@@ -92,7 +92,7 @@ photo_src":详情的图片的链接time_stamp":时间戳
 ```
 
 
-##/offline/recommend?time=201603042311
+##<font color='blue'>/offline/recommend?time=201603042311</font>
 ###GET
 ###离线下载推荐专辑的数据,增量下载
 ###url参数
@@ -102,7 +102,7 @@ photo_src":详情的图片的链接time_stamp":时间戳
 {'offset':0,data:[{RecommendAlbum},{RecommendAlbum}...]}
 ```
 
-##/offline/detail
+##<font color='blue'>/offline/detail?time=201603042311</font>
 ###GET
 ###离线下载专辑详情的数据,增量下载
 ###url参数
@@ -113,7 +113,7 @@ photo_src":详情的图片的链接time_stamp":时间戳
 ```
 
 
-##/offline/whole
+##<font color='blue'>/offline/whole?time=201603042311</font>
 ###GET
 ###离线下载全部专辑的数据,增量下载
 ###url参数
