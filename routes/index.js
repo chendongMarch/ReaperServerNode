@@ -73,7 +73,7 @@ router.get('/lucky', function (req, res, next) {
 router.get('/scan/whole', function (req, res, next) {
     var offset = ~~req.query.offset;
     var limit = ~~req.query.limit;
-    query.getWholeAlbumScanData('album_whole', offset, limit, function (rst) {
+    query.getWholeAlbumScanData(offset, limit, function (rst) {
         res.send('{' + '"offset":' + offset + ',' + '"data":' + JSON.stringify(rst) + '}');
         res.end();
     });
@@ -85,7 +85,7 @@ router.get('/scan/recommend', function (req, res, next) {
     var offset = ~~req.query.offset;
     var limit = ~~req.query.limit;
     console.log("albumtype = " + albumtype)
-    query.getRecommendAlbumScanData('album_recommend', albumtype, offset, limit, function (rst) {
+    query.getRecommendAlbumScanData(albumtype, offset, limit, function (rst) {
         res.send('{' + '"offset":' + offset + ',' + '"data":' + JSON.stringify(rst) + '}');
         res.end();
     });
