@@ -6,6 +6,32 @@ router.get('/', function (req, res, next) {
     res.render('index');
 });
 
+
+router.post('/post', function (req, res) {
+    console.log("接受post" + req.body.test)
+    console.log(req.method)
+    res.end("a" + req.method)
+});
+
+
+router.post('/addUser', function (req, res) {
+    var username = req.body.username;
+    var pwd = req.body.pwd;
+    query.addUser(username, pwd, function (rst) {
+        res.send('{' + '"status":' + rst + ',"offset":' + 0 + '}');
+        res.end();
+    })
+});
+
+router.post('/checkUser', function (req, res) {
+    var username = req.body.username;
+    var pwd = req.body.pwd;
+    query.checkUser(username, pwd, function (rst) {
+        res.send('{' + '"status":' + rst + ',"offset":' + 0 + '}');
+        res.end();
+    })
+});
+
 router.get('/download', function (req, res, next) {
     var fs = require('fs');
     var pdf = fs.createReadStream("../NodeTest/reaper-1.0.apk");
@@ -16,6 +42,14 @@ router.get('/download', function (req, res, next) {
     pdf.pipe(res);
 });
 
+//监测版本
+router.get('/checkVersion', function (req, res, next) {
+    query.checkVersion(function (rst) {
+        console.log(rst[0].versioncode)
+        res.send('{' + '"status":' + 0 + '",offset":' + 0 + ',' + '"versionCode":' + rst[0].versioncode + '}');
+        res.end();
+    })
+});
 
 //测试链接
 router.get('/test', function (req, res, next) {
@@ -26,7 +60,7 @@ router.get('/test', function (req, res, next) {
 });
 
 
-//测试链接
+//随机浏览
 router.get('/lucky', function (req, res, next) {
     var limit = ~~req.query.limit;
     query.lucky(limit, function (rst) {
